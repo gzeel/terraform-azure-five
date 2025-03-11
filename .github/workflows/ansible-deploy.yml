@@ -36,11 +36,11 @@ jobs:
       - name: Create known_hosts file
         run: |
           # Add each host to known_hosts
-          ssh-keyscan -H 40.68.7.68 >> .ssh/known_hosts
-          ssh-keyscan -H 40.68.5.23 >> .ssh/known_hosts
-          ssh-keyscan -H 40.68.5.7 >> .ssh/known_hosts
-          ssh-keyscan -H 40.68.6.230 >> .ssh/known_hosts
-          ssh-keyscan -H 40.68.0.90 >> .ssh/known_hosts
+          ssh-keyscan -H 20.160.156.107 >> .ssh/known_hosts
+          ssh-keyscan -H 20.160.156.142 >> .ssh/known_hosts
+          ssh-keyscan -H 20.160.156.98 >> .ssh/known_hosts
+          ssh-keyscan -H 20.160.156.133 >> .ssh/known_hosts
+          ssh-keyscan -H 20.160.156.127 >> .ssh/known_hosts
           chmod 600 .ssh/known_hosts
 
       - name: Run Ansible playbook
