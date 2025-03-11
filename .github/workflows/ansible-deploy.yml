@@ -24,24 +24,25 @@ jobs:
           pip install ansible
 
       - name: Set up SSH directory
-        run: mkdir -p .ssh
+        run: mkdir -p $HOME/.ssh
 
       - name: Set up SSH private key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > .ssh/azure_macbookpro.pem
-          chmod 600 .ssh/azure_macbookpro.pem
+          echo "$SSH_PRIVATE_KEY" > $HOME/.ssh/azure_macbookpro
+          chmod 600 $HOME/.ssh/azure_macbookpro
+          ls -la $HOME/.ssh/
 
       - name: Create known_hosts file
         run: |
           # Add each host to known_hosts
-          ssh-keyscan -H 20.160.156.107 >> .ssh/known_hosts
-          ssh-keyscan -H 20.160.156.142 >> .ssh/known_hosts
-          ssh-keyscan -H 20.160.156.98 >> .ssh/known_hosts
-          ssh-keyscan -H 20.160.156.133 >> .ssh/known_hosts
-          ssh-keyscan -H 20.160.156.127 >> .ssh/known_hosts
-          chmod 600 .ssh/known_hosts
+          ssh-keyscan -H 20.160.156.107 >> $HOME/.ssh/known_hosts
+          ssh-keyscan -H 20.160.156.142 >> $HOME/.ssh/known_hosts
+          ssh-keyscan -H 20.160.156.98 >> $HOME/.ssh/known_hosts
+          ssh-keyscan -H 20.160.156.133 >> $HOME/.ssh/known_hosts
+          ssh-keyscan -H 20.160.156.127 >> $HOME/.ssh/known_hosts
+          chmod 600 $HOME/.ssh/known_hosts
 
       - name: Run Ansible playbook
-        run: ansible-playbook -i inventory install_nginx.yml
+        run: ansible-playbook -i inventory install_nginx.yml -vvv

@@ -7,6 +7,6 @@
 
 [web_servers:vars]
 ansible_user=gerrit
-ansible_ssh_private_key_file=/github/workspace/.ssh/azure_macbookpro
+ansible_ssh_private_key_file=~/.ssh/azure_macbookpro
 ansible_become=yes
 ansible_become_method=sudo
