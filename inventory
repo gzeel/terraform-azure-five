@@ -1,0 +1,12 @@
+[web_servers]
+20.160.156.107
+20.160.156.142
+20.160.156.98
+20.160.156.133
+20.160.156.127
+
+[web_servers:vars]
+ansible_user=gerrit
+ansible_ssh_private_key_file=/github/workspace/.ssh/azure_macbookpro
+ansible_become=yes
+ansible_become_method=sudo

@@ -1,0 +1,47 @@
+name: Deploy Nginx with Ansible
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+
+      - name: Set up SSH directory
+        run: mkdir -p .ssh
+
+      - name: Set up SSH private key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > .ssh/azure_macbookpro.pem
+          chmod 600 .ssh/azure_macbookpro.pem
+
+      - name: Create known_hosts file
+        run: |
+          # Add each host to known_hosts
+          ssh-keyscan -H 40.68.7.68 >> .ssh/known_hosts
+          ssh-keyscan -H 40.68.5.23 >> .ssh/known_hosts
+          ssh-keyscan -H 40.68.5.7 >> .ssh/known_hosts
+          ssh-keyscan -H 40.68.6.230 >> .ssh/known_hosts
+          ssh-keyscan -H 40.68.0.90 >> .ssh/known_hosts
+          chmod 600 .ssh/known_hosts
+
+      - name: Run Ansible playbook
+        run: ansible-playbook -i inventory install_nginx.yml

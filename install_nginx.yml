@@ -1,0 +1,51 @@
+---
+# install_nginx.yml
+- name: Install specific nginx version
+  hosts: web_servers
+  become: yes
+  vars:
+    nginx_version: "1.24.0" # Recent stable version, not the latest
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install prerequisites
+      apt:
+        name:
+          - gnupg2
+          - ca-certificates
+          - lsb-release
+        state: present
+
+    - name: Add nginx signing key
+      apt_key:
+        url: https://nginx.org/keys/nginx_signing.key
+        state: present
+
+    - name: Add nginx repository
+      apt_repository:
+        repo: "deb http://nginx.org/packages/ubuntu {{ ansible_distribution_release }} nginx"
+        state: present
+        filename: nginx
+
+    - name: Install specific nginx version
+      apt:
+        name: "nginx={{ nginx_version }}*"
+        state: present
+        allow_downgrade: yes
+        update_cache: yes
+
+    - name: Start and enable nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Verify nginx is running with correct version
+      shell: "nginx -v 2>&1 | grep -q '{{ nginx_version }}'"
+      register: nginx_check
+      failed_when: nginx_check.rc != 0
+      changed_when: false
