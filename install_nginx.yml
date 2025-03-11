@@ -4,7 +4,7 @@
   hosts: web_servers
   become: yes
   vars:
-    nginx_version: "1.26.0" # Recent stable version, not the latest
+    nginx_version: "1.24.0" # Recent stable version, not the latest
 
   tasks:
     - name: Update apt cache
